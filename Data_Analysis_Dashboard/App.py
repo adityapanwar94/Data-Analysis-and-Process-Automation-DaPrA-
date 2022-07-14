@@ -31,12 +31,12 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 #========================================================================================
 
-def main():    
+def main():  
     """ The functions contains the complete script for the webpage """
     #-------------------------------------------------------------------------------
     # Title and About Section
     st.title("Data-Analysis-and-Process-Automation Dashboard")
-    image = Image.open('img1.jpg')
+    image = Image.open('Data_Analysis_Dashboard\img1.jpg')
     st.image(image, caption='Check About', use_column_width='always')
     with st.expander("About the webpage"):
         st.write("""
@@ -56,7 +56,7 @@ def main():
         """ The functions contains the script to load the data. 
         Note: st.cache creates a cache copy of the uploaded dataset"""
 
-        data = pd.read_csv("Refine_data(07-07-22).csv")
+        data = pd.read_csv("Data_Analysis_Dashboard\Refine_data(07-07-22).csv")
         data = data.drop(['Unnamed: 0'], axis=1)
         return data
     dataset = load_data()
