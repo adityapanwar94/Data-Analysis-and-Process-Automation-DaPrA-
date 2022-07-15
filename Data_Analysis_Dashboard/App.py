@@ -51,7 +51,7 @@ def main():
     st.sidebar.title("Data Analsis Controller")
     #-------------------------------------------------------------------------------
     # Loading the dataset...
-    @st.cache(allow_output_mutation=True)
+    # @st.cache(allow_output_mutation=True)
     def load_data():
         """ The functions contains the script to load the data. 
         Note: st.cache creates a cache copy of the uploaded dataset"""
@@ -132,6 +132,12 @@ def main():
     if len(optionss) == 2:
         fig = px.scatter(dataset_updated, x=optionss[0], y=optionss[1])
         st.write(fig)
+        corr1 = dataset_updated.iloc[:,0].corr(dataset_updated.iloc[:,1],method='pearson', min_periods=3)
+        col_left, col_right = st.columns(2)
+        with col_left:
+            st.markdown("**Pearson Correlation Value of the features-**")
+        with col_right:
+            st.write(corr1)
     else:
         st.write("Select columns first") 
     #***************************************************************
@@ -243,7 +249,7 @@ def main():
                 if view_pcadet:
                     with pcacol_left:
                         st.write("### **• PCA's Explained Variance Ratio**")
-                        st.write(pca.explained_variance_ratio_)
+                        st.write(pca.explained_variance_ratio_.cumsum() * 100)
                     with pcacol_right:
                         st.write("### **• PCA's Dimensionality Reduced Dataset**")
                         st.write(principalDf)
@@ -303,10 +309,13 @@ def main():
         with st.form("PCA2_form"):
             collistn = data_scaled.columns.to_list()
             kmcolptions = st.multiselect('Select the columns for K-means', collistn)
+            allcols = int(st.number_input("To select all cols type 1 else 0", value=0,key=8))
             max_clusters = int(st.number_input("Maximum number of Clusters", value=0,key=1))
             submit = st.form_submit_button("Submit")
-
-        new_dataset = dataset[kmcolptions]
+        if allcols == 1:
+            new_dataset = data_scaled
+        else:
+            new_dataset = data_scaled[kmcolptions]
         #_______________________________________________________________________________
         # K-Means on User-Selected dataset...
         wcss = []
@@ -320,7 +329,7 @@ def main():
         fig.update_layout(title='WCSS vs. Cluster number', xaxis_title='Clusters', yaxis_title='WCSS')
         st.write(fig)
         # Input box to select the optimal number of clusters from elbow graph...
-        opt_cluster = int(st.number_input("Select the optimal cluster value",value=0,key=2))
+        opt_cluster = int(st.number_input("Select the optimal cluster value",value=0,key=9))
         if opt_cluster:
             algorithm_pca = (KMeans(n_clusters = opt_cluster ,init='k-means++', n_init = 10 ,max_iter=300, 
                     tol=0.0001,  random_state= 100  , algorithm='elkan') )
@@ -328,7 +337,7 @@ def main():
             labels_pca = algorithm_pca.labels_
             centroids_pca = algorithm_pca.cluster_centers_
             # Checkbox to view centroid and labels developed from clusters...
-            view_kmdet = st.checkbox("To view the centroid and the labels", value=False)
+            view_kmdet = st.checkbox("To view the centroid and the labels", value=False, key=10)
             if view_kmdet:
                 st.write(centroids_pca)
                 st.write(np.unique(labels_pca))
