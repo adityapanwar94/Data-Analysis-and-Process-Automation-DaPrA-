@@ -26,8 +26,10 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 import plotly.express as px
+import matplotlib.pyplot as plt
 from PIL import Image
 import plotly.graph_objects as go
+from sklearn.metrics import silhouette_samples, silhouette_score
 from plotly.subplots import make_subplots
 #========================================================================================
 
@@ -221,7 +223,7 @@ def main():
             collist_w = data_scaled.columns.to_list()
             wcolptions = st.multiselect('Select the columns for defining weights', collist_w)
             min_val = float(st.number_input("Set up min value", value=0,key=21))
-            max_val = float(st.number_input("Set up max value", value=0,key=22))
+            max_val = float(st.number_input("Set up max value", value=1000,key=22))
             w_allcols = st.checkbox('For selecting all columns', value=False, key=30) 
             submit = st.form_submit_button("Submit")
         if w_allcols:
@@ -231,54 +233,60 @@ def main():
             labels = copy.deepcopy(col_for_form)
             with st.form(key='weight_input'):
                 for i,col in enumerate(col_for_form):
-                    col_for_form[i] = st.slider(labels[i], min_value=min_val, max_value=max_val, value=10.0, step=0.01)
+                    col_for_form[i] = st.slider(labels[i], min_value=min_val, max_value=max_val, value=10.0, step=0.5)
                 submit2 = st.form_submit_button(label='Submit')
             if submit2:
-                st.write(col_for_form)
-        
-            
+                for i in range(0,len(labels)):
+                    st.write(labels[i])
+                    st.write(col_for_form[i])
+                    data_scaled[labels[i]] = data_scaled[labels[i]].apply(lambda x: x*col_for_form[i])
+                # Checkbox to view scaled dataset on the webpage...
+            view_dataweights = st.checkbox('To view scaled dataset', value=False, key=40)
+            if view_dataweights:
+                st.write(data_scaled)
     #---------------------------------------------------------------------------------
     # K-Means with Principal Component Analysis
     if st.sidebar.checkbox("K-Means with PCA",False,key=3):
+        flag = 0
         st.write("### **• K-Means with Principal Component Analysis**")
         column_left, column_right = st.columns(2)
         #_________________________________________________________________________
         with column_left:
             # Form creation for users to specify pca parameters and maximum clusters...
             with st.form("PCA_form"):
-                components = int(st.number_input("Number of components", value=0,key=0))
+                components1 = st.number_input("Number of components", value=0,key=0)
+                components2 = st.number_input("Variance value", value=0.0,key=0)
                 Svd_Solver = st.selectbox('Svd_Solver', ('auto', 'full', 'arpack', 'randomized'))
                 max_clusters = int(st.number_input("Maximum number of Clusters", value=0,key=1))
                 submit = st.form_submit_button("Submit")
-        pcacolname = []
-        az_Upper = string.ascii_uppercase
-        for i in range(components):
-            pcacolname.append(az_Upper[i])
-        #_________________________________________________________________________
-        with column_right:
-            # Form creation for users to define column names for PCA generated dataset...
-            with st.form(key='columnname'):
-                for i,pcacol in enumerate(pcacolname):
-                    pcacolname[i] = st.text_input("column-"+pcacolname[i], key = i)
-                submitcol = st.form_submit_button(label='Submit Names')
-        #__________________________________________________________________________
-        # PCA Implementation with user-defined parameters...
-        if len(pcacolname) != 0:
-            if pcacolname[0] != "":
-                pca = PCA(n_components=components, svd_solver=Svd_Solver)
-                principalComponents = pca.fit_transform(data_scaled)
-                principalDf = pd.DataFrame(data = principalComponents, columns=pcacolname)
-                # Checkbox to view PCA generated values...
-                view_pcadet = st.checkbox('To view the variance and PCA reduced dataset', value=False)
-                pcacol_left, pcacol_right = st.columns(2)
-                if view_pcadet:
-                    with pcacol_left:
-                        st.write("### **• PCA's Explained Variance Ratio**")
-                        st.write(pca.explained_variance_ratio_.cumsum() * 100)
-                    with pcacol_right:
-                        st.write("### **• PCA's Dimensionality Reduced Dataset**")
-                        st.write(principalDf)
-                    # Checkbox to view PCA's visual Analysis...
+        # if submit:
+        if components2 != 0.0:
+            pcacolname = []
+            pca = PCA(n_components=components2, svd_solver=Svd_Solver)
+            principalComponents = pca.fit_transform(data_scaled)
+            principalDf = pd.DataFrame(data = principalComponents)
+            flag = 1
+            # Checkbox to view PCA generated values...
+            view_pcadet = st.checkbox('To view the variance and PCA reduced dataset', value=False)
+            pcacol_left, pcacol_right = st.columns(2)
+            if view_pcadet:
+                with pcacol_left:
+                    st.write("### **• PCA's Explained Variance Ratio**")
+                    st.write(pca.explained_variance_ratio_.cumsum() * 100)
+                with pcacol_right:
+                    st.write("### **• PCA's Dimensionality Reduced Dataset**")
+                    st.write(principalDf)
+                st.write('### **• Top 4 most important features in each component**')
+                pca_components = abs(pca.components_)
+                for row in range(pca_components.shape[0]):
+                    # get the indices of the top 4 values in each row
+                    temp = np.argpartition(-(pca_components[row]), 4) 
+                    # sort the indices in descending order
+                    indices = temp[np.argsort((-pca_components[row])[temp])][:4]
+                    # print the top 4 feature names
+                    st.write(f'Component {row}: {data_scaled.columns[indices].to_list()}')
+                # Checkbox to view PCA's visual Analysis...
+                if principalDf.shape[1] <= 20:
                     st.write("### **• PCA Visualisation**")
                     labels = {str(i): f"PC {i+1} ({var:.1f}%)"
                     for i, var in enumerate(pca.explained_variance_ratio_ * 100)}
@@ -288,33 +296,98 @@ def main():
                         dimensions=range(len(pca.explained_variance_ratio_)))
                     fig.update_traces(diagonal_visible=False)
                     st.write(fig)
-                view_kmleft, view_kmright = st.columns(2)
-                #__________________________________________________________________________
-                # K-Means on PCA reduced dataset...
-                wcss = []
-                K = range(1,max_clusters)
-                for k in K:
-                    km = KMeans(n_clusters=k)
-                    km = km.fit(principalDf)
-                    wcss.append(km.inertia_)
-                st.write("### **• The Elbow Graph**")
-                fig = go.Figure(data = go.Scatter(x = np.array(K), y = wcss))
-                fig.update_layout(title='WCSS vs. Cluster number', xaxis_title='Clusters', yaxis_title='WCSS')
-                st.write(fig)
-                # Input box to select the optimal number of clusters from elbow graph...
-                opt_cluster = int(st.number_input("Select the optimal cluster value",value=0,key=2))
-                
-                if opt_cluster:
-                    algorithm_pca = (KMeans(n_clusters = opt_cluster ,init='k-means++', n_init = 10 ,max_iter=300, 
-                            tol=0.0001,  random_state= 100  , algorithm='elkan') )
-                    algorithm_pca.fit(principalDf)
-                    labels_pca = algorithm_pca.labels_
-                    centroids_pca = algorithm_pca.cluster_centers_
-                    # Checkbox to view centroid and labels developed from clusters...
-                    view_kmdet = st.checkbox("To view the centroid and the labels", value=False)
-                    if view_kmdet:
-                        st.write(centroids_pca)
-                        st.write(np.unique(labels_pca))
+        else:
+            pcacolname = []
+            az_Upper = string.ascii_uppercase
+            for i in range(components1):
+                pcacolname.append(az_Upper[i])
+            #_________________________________________________________________________
+            with column_right:
+                # Form creation for users to define column names for PCA generated dataset...
+                with st.form(key='columnname'):
+                    for i,pcacol in enumerate(pcacolname):
+                        pcacolname[i] = st.text_input("column-"+pcacolname[i], key = i)
+                    submitcol = st.form_submit_button(label='Submit Names')
+            #__________________________________________________________________________
+            # PCA Implementation with user-defined parameters...
+            if len(pcacolname) != 0:
+                if pcacolname[0] != "":
+                    pca = PCA(n_components=components1, svd_solver=Svd_Solver)
+                    principalComponents = pca.fit_transform(data_scaled)
+                    principalDf = pd.DataFrame(data = principalComponents, columns=pcacolname)
+                    flag = 1
+                    # Checkbox to view PCA generated values...
+                    view_pcadet = st.checkbox('To view the variance and PCA reduced dataset', value=False)
+                    pcacol_left, pcacol_right = st.columns(2)
+                    if view_pcadet:
+                        with pcacol_left:
+                            st.write("### **• PCA's Explained Variance Ratio**")
+                            st.write(pca.explained_variance_ratio_.cumsum() * 100)
+                        with pcacol_right:
+                            st.write("### **• PCA's Dimensionality Reduced Dataset**")
+                            st.write(principalDf)
+                        # Checkbox to view PCA's visual Analysis...
+                        st.write("### **• PCA Visualisation**")
+                        labels = {str(i): f"PC {i+1} ({var:.1f}%)"
+                        for i, var in enumerate(pca.explained_variance_ratio_ * 100)}
+                        fig = px.scatter_matrix(
+                            principalComponents,
+                            labels=labels,
+                            dimensions=range(len(pca.explained_variance_ratio_)))
+                        fig.update_traces(diagonal_visible=False)
+                        st.write(fig)
+
+                        st.write('### **• Top 4 most important features in each component**')
+                        pca_components = abs(pca.components_)
+                        for row in range(pca_components.shape[0]):
+                            # get the indices of the top 4 values in each row
+                            temp = np.argpartition(-(pca_components[row]), 4) 
+                            # sort the indices in descending order
+                            indices = temp[np.argsort((-pca_components[row])[temp])][:4]
+                            # print the top 4 feature names
+                            st.write(f'Component {row}: {data_scaled.columns[indices].to_list()}')
+                    view_kmleft, view_kmright = st.columns(2)
+        #__________________________________________________________________________
+        # K-Means on PCA reduced dataset...
+        if flag == 1:
+            wcss = []
+            K = range(1,max_clusters)
+            for k in K:
+                km = KMeans(n_clusters=k)
+                km = km.fit(principalDf)
+                wcss.append(km.inertia_)
+            st.write("### **• The Elbow Graph**")
+            fig = go.Figure(data = go.Scatter(x = np.array(K), y = wcss))
+            fig.update_layout(title='WCSS vs. Cluster number', xaxis_title='Clusters', yaxis_title='WCSS')
+            st.write(fig)
+            # Input box to select the optimal number of clusters from elbow graph...
+            opt_cluster = int(st.number_input("Select the optimal cluster value",value=0,key=2))
+            
+            if opt_cluster:
+                algorithm_pca = (KMeans(n_clusters = opt_cluster ,init='k-means++', n_init = 10 ,max_iter=300, 
+                        tol=0.0001,  random_state= 100  , algorithm='elkan') )
+                algorithm_pca.fit(principalDf)
+                labels_pca = algorithm_pca.labels_
+                centroids_pca = algorithm_pca.cluster_centers_
+                # Checkbox to view centroid and labels developed from clusters...
+                view_kmdet = st.checkbox("To view the centroid and the labels", value=False)
+                if view_kmdet:
+                    st.write(centroids_pca)
+                    st.write(np.unique(labels_pca))
+                # Visualise 2-Dimensional and 3-Dimensional clustering...
+                if len(pcacolname) == 0:
+                    # Scatter plot for two-dimensional PCA datset... 
+                    if principalDf.shape[1] == 2:
+                        principalDf.columns = ['col1', 'col2']
+                        fig = px.scatter(principalDf, x='col1', y = 'col2', color=labels_pca)
+                        st.write(fig)
+                     # 3-D Scatter plot for three-dimensional PCA datset...
+                    elif principalDf.shape[1] == 3:
+                        principalDf.columns = ['col1', 'col2', 'col3']  
+                        fig = px.scatter_3d(principalDf, x = 'col1', y='col2', z='col3',
+                        color=labels_pca, opacity = 0.8, size_max=30)
+                        st.write(fig)
+                else:
                     # Scatter plot for two-dimensional PCA datset...    
                     if len(pcacolname) == 2:
                         fig = px.scatter(principalDf, x=pcacolname[0], y = pcacolname[1], color=labels_pca)
@@ -324,6 +397,32 @@ def main():
                         fig = px.scatter_3d(principalDf, x = pcacolname[0], y=pcacolname[1], z=pcacolname[2],
                         color=labels_pca, opacity = 0.8, size_max=30)
                         st.write(fig)
+                # Visualise Sihoutte Plots
+                silhouette_vals = silhouette_samples(principalDf, labels_pca)
+                fig, ax1 = plt.subplots(1)
+                fig.set_size_inches(10, 7)
+                centroids = algorithm_pca.cluster_centers_
+                y_ticks = []
+                y_lower, y_upper = 0, 0
+                for i, cluster in enumerate(np.unique(labels_pca)):
+                    cluster_silhouette_vals = silhouette_vals[labels_pca == cluster]
+                    cluster_silhouette_vals.sort()
+                    y_upper += len(cluster_silhouette_vals)
+                    ax1.barh(range(y_lower, y_upper), cluster_silhouette_vals, edgecolor='none', height=1)
+                    ax1.text(-0.03, (y_lower + y_upper) / 2, str(i + 1))
+                    y_lower += len(cluster_silhouette_vals)
+
+                # Get the average silhouette score and plot it
+                avg_score = np.mean(silhouette_vals)
+                ax1.axvline(avg_score, linestyle='--', linewidth=2, color='green')
+                ax1.set_yticks([])
+                ax1.set_xlim([-0.1, 1])
+                ax1.set_xlabel('Silhouette coefficient values')
+                ax1.set_ylabel('Cluster labels')
+                ax1.set_title('Silhouette plot for the various clusters', y=1.02)
+                st.write(fig)
+                
+                
 
     #---------------------------------------------------------------------------------
     # K-Means without Principal Component Analysis...
