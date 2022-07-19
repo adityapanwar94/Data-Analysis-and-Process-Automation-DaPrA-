@@ -63,7 +63,7 @@ def main():
         return data
     dataset = load_data()
     # Representation of tabular dataset on the webpage...
-    if st.sidebar.checkbox("Show Dataset",False,key=5):
+    if st.sidebar.checkbox("Show Dataset",False,key=0):
         st.markdown("## Dataset in Tabular Format")
         st.markdown("### The Pre-Processed Dataset")
         st.write(dataset)
@@ -72,7 +72,7 @@ def main():
     collist = dataset.columns.to_list()
 
     # Dropping columns from the dataset on the webpage...
-    if st.sidebar.checkbox("Drop Columns",False,key=0):
+    if st.sidebar.checkbox("Drop Columns",False,key=1):
         st.markdown("### Drop Irrelevant Columns")
         options = st.multiselect('Select the Columns to be dropped', collist)
         dataset_updated = dataset.drop(options,axis=1)
@@ -89,7 +89,7 @@ def main():
         dataset_updated = dataset
    #-------------------------------------------------------------------------------
     # Add Column Information on the webpage...
-    if st.sidebar.checkbox("Add Feature Info",False,key=1):
+    if st.sidebar.checkbox("Add Feature Info",False,key=2):
         st.markdown("### • Generate Column Description Table")
         # Multiselect option for column selection...
         options = st.multiselect('Select the columns for which information has to be provided', collist)
@@ -112,7 +112,7 @@ def main():
     #*************************************************************
     # Automated Bar plots for webpage...
     st.markdown("### • Bar Plots Diagram")
-    optionsb = st.multiselect('Select columns for analysis', collist, key=0)
+    optionsb = st.multiselect('Select columns for analysis', collist, key=5)
     labelsb = copy.deepcopy(optionsb)
     if len(optionsb) > 0:
         datfrm = pd.DataFrame([])
@@ -129,7 +129,7 @@ def main():
     #****************************************************************
     # Automated Correlation Plots between two columns for the webpage...
     st.markdown("### • Correlation Plots Diagram")
-    optionss = st.multiselect('Select two columns for analysis', collist, key=1)
+    optionss = st.multiselect('Select two columns for analysis', collist, key=6)
     labelss = copy.deepcopy(optionss)
     if len(optionss) == 2:
         fig = px.scatter(dataset_updated, x=optionss[0], y=optionss[1])
@@ -144,10 +144,10 @@ def main():
         st.write("Select columns first") 
     #***************************************************************
     # Automated Parallel Category Diagrams for the webpage...
-    if st.sidebar.checkbox("Parallel Diagram",False,key=2):
+    if st.sidebar.checkbox("Parallel Diagram",False,key=7):
         st.markdown("### • Parallel Category Diagram")
         colorlist = ['Plotly3', 'dense', 'Turbo', 'Rainbow', 'Burg', 'Sunsetdark', 'Agsunset']
-        options = st.multiselect('Select 4 columns for analysis', collist, key=3)
+        options = st.multiselect('Select 4 columns for analysis', collist, key=8)
         coloroptions = st.selectbox('Select a colour option', colorlist )
         labels = copy.deepcopy(options)
         if len(options) == 4:
@@ -216,37 +216,51 @@ def main():
         data_scaled = dataset_updated
     #---------------------------------------------------------------------------------
     # Checkbox to allow Weight Defining...
-    weight = st.sidebar.checkbox('Feature Weights', value=False, key=10)
+    weight = st.sidebar.checkbox('Feature Weights', value=False, key=9)
+    w_flag = 0
     if weight:
         st.write("### **• Setting up feature weights**")
+        # Forms to select columns, max values, min values...
         with st.form("Weight_form"):
             collist_w = data_scaled.columns.to_list()
             wcolptions = st.multiselect('Select the columns for defining weights', collist_w)
-            min_val = float(st.number_input("Set up min value", value=0,key=21))
-            max_val = float(st.number_input("Set up max value", value=1000,key=22))
-            w_allcols = st.checkbox('For selecting all columns', value=False, key=30) 
+            min_val = float(st.number_input("Set up min value", value=0,key=10))
+            max_val = float(st.number_input("Set up max value", value=1000,key=11))
+            w_allcols = st.checkbox('For selecting all columns', value=False, key=12) 
             submit = st.form_submit_button("Submit")
+        # When all columns are selected...    
         if w_allcols:
             col_for_form = collist_w
+            labels = copy.deepcopy(col_for_form)
+            with st.form(key='weight_input'):
+                for i,col in enumerate(col_for_form):
+                    col_for_form[i] = st.slider(labels[i], min_value=min_val, max_value=max_val, value=10.0, step=1.0)
+                submit2 = st.form_submit_button(label='Submit')
+            for i in range(0,len(labels)):
+                data_scaled[labels[i]] = data_scaled[labels[i]].apply(lambda x: x*col_for_form[i])
+                # Checkbox to view scaled dataset on the webpage...
+            view_dataweights = st.checkbox('To view scaled dataset', value=False, key=13)
+            if view_dataweights:
+                st.write(data_scaled)
+        # For specific column selected...
         else:
             col_for_form = wcolptions
             labels = copy.deepcopy(col_for_form)
+            # Form to enter weights for features...
             with st.form(key='weight_input'):
                 for i,col in enumerate(col_for_form):
                     col_for_form[i] = st.slider(labels[i], min_value=min_val, max_value=max_val, value=10.0, step=0.5)
                 submit2 = st.form_submit_button(label='Submit')
-            if submit2:
-                for i in range(0,len(labels)):
-                    st.write(labels[i])
-                    st.write(col_for_form[i])
-                    data_scaled[labels[i]] = data_scaled[labels[i]].apply(lambda x: x*col_for_form[i])
-                # Checkbox to view scaled dataset on the webpage...
-            view_dataweights = st.checkbox('To view scaled dataset', value=False, key=40)
+            # Implementing weight multiplication...
+            for i in range(0,len(labels)):
+                data_scaled[labels[i]] = data_scaled[labels[i]].apply(lambda x: x*col_for_form[i])
+            # Checkbox to view scaled dataset on the webpage...
+            view_dataweights = st.checkbox('To view scaled dataset', value=False, key=13)
             if view_dataweights:
                 st.write(data_scaled)
     #---------------------------------------------------------------------------------
     # K-Means with Principal Component Analysis
-    if st.sidebar.checkbox("K-Means with PCA",False,key=3):
+    if st.sidebar.checkbox("K-Means with PCA",False,key=14):
         flag = 0
         st.write("### **• K-Means with Principal Component Analysis**")
         column_left, column_right = st.columns(2)
@@ -254,18 +268,21 @@ def main():
         with column_left:
             # Form creation for users to specify pca parameters and maximum clusters...
             with st.form("PCA_form"):
-                components1 = st.number_input("Number of components", value=0,key=0)
-                components2 = st.number_input("Variance value", value=0.0,key=0)
+                components1 = st.number_input("Number of components", value=0,key=15)
+                components2 = st.number_input("Variance value", value=0.0,key=16)
                 Svd_Solver = st.selectbox('Svd_Solver', ('auto', 'full', 'arpack', 'randomized'))
-                max_clusters = int(st.number_input("Maximum number of Clusters", value=0,key=1))
+                max_clusters = int(st.number_input("Maximum number of Clusters", value=0,key=17))
                 submit = st.form_submit_button("Submit")
-        # if submit:
+        # PCA when variance percentage is specified...
         if components2 != 0.0:
+            #__________________________________________________________________________
+            # PCA Implementation with user-defined parameters...
             pcacolname = []
             pca = PCA(n_components=components2, svd_solver=Svd_Solver)
             principalComponents = pca.fit_transform(data_scaled)
             principalDf = pd.DataFrame(data = principalComponents)
             flag = 1
+            #__________________________________________________________________________
             # Checkbox to view PCA generated values...
             view_pcadet = st.checkbox('To view the variance and PCA reduced dataset', value=False)
             pcacol_left, pcacol_right = st.columns(2)
@@ -296,6 +313,8 @@ def main():
                         dimensions=range(len(pca.explained_variance_ratio_)))
                     fig.update_traces(diagonal_visible=False)
                     st.write(fig)
+    
+        # PCA when component number is specified...
         else:
             pcacolname = []
             az_Upper = string.ascii_uppercase
@@ -361,7 +380,7 @@ def main():
             fig.update_layout(title='WCSS vs. Cluster number', xaxis_title='Clusters', yaxis_title='WCSS')
             st.write(fig)
             # Input box to select the optimal number of clusters from elbow graph...
-            opt_cluster = int(st.number_input("Select the optimal cluster value",value=0,key=2))
+            opt_cluster = int(st.number_input("Select the optimal cluster value",value=0,key=18))
             
             if opt_cluster:
                 algorithm_pca = (KMeans(n_clusters = opt_cluster ,init='k-means++', n_init = 10 ,max_iter=300, 
@@ -397,7 +416,7 @@ def main():
                         fig = px.scatter_3d(principalDf, x = pcacolname[0], y=pcacolname[1], z=pcacolname[2],
                         color=labels_pca, opacity = 0.8, size_max=30)
                         st.write(fig)
-                # Visualise Sihoutte Plots
+                # Visualise Sihouette Plots...
                 silhouette_vals = silhouette_samples(principalDf, labels_pca)
                 fig, ax1 = plt.subplots(1)
                 fig.set_size_inches(10, 7)
@@ -426,15 +445,15 @@ def main():
 
     #---------------------------------------------------------------------------------
     # K-Means without Principal Component Analysis...
-    if st.sidebar.checkbox("K-Means without PCA",False,key=4):
+    if st.sidebar.checkbox("K-Means without PCA",False,key=19):
         st.write("### **• K-Means without Principal Component Analysis**")
         #_______________________________________________________________________________
         # Form creation for users to specify maximum clusters and columns to include...
         with st.form("PCA2_form"):
             collistn = data_scaled.columns.to_list()
             kmcolptions = st.multiselect('Select the columns for K-means', collistn)
-            allcols = int(st.number_input("To select all cols type 1 else 0", value=0,key=8))
-            max_clusters = int(st.number_input("Maximum number of Clusters", value=0,key=1))
+            allcols = int(st.number_input("To select all cols type 1 else 0", value=0,key=20))
+            max_clusters = int(st.number_input("Maximum number of Clusters", value=0,key=21))
             submit = st.form_submit_button("Submit")
         if allcols == 1:
             new_dataset = data_scaled
@@ -453,15 +472,39 @@ def main():
         fig.update_layout(title='WCSS vs. Cluster number', xaxis_title='Clusters', yaxis_title='WCSS')
         st.write(fig)
         # Input box to select the optimal number of clusters from elbow graph...
-        opt_cluster = int(st.number_input("Select the optimal cluster value",value=0,key=9))
+        opt_cluster = int(st.number_input("Select the optimal cluster value",value=0,key=22))
         if opt_cluster:
             algorithm_pca = (KMeans(n_clusters = opt_cluster ,init='k-means++', n_init = 10 ,max_iter=300, 
                     tol=0.0001,  random_state= 100  , algorithm='elkan') )
             algorithm_pca.fit(new_dataset)
             labels_pca = algorithm_pca.labels_
             centroids_pca = algorithm_pca.cluster_centers_
+            # Visualise Sihouette Plots...
+            silhouette_vals = silhouette_samples(new_dataset, labels_pca)
+            fig, ax1 = plt.subplots(1)
+            fig.set_size_inches(10, 7)
+            centroids = algorithm_pca.cluster_centers_
+            y_ticks = []
+            y_lower, y_upper = 0, 0
+            for i, cluster in enumerate(np.unique(labels_pca)):
+                cluster_silhouette_vals = silhouette_vals[labels_pca == cluster]
+                cluster_silhouette_vals.sort()
+                y_upper += len(cluster_silhouette_vals)
+                ax1.barh(range(y_lower, y_upper), cluster_silhouette_vals, edgecolor='none', height=1)
+                ax1.text(-0.03, (y_lower + y_upper) / 2, str(i + 1))
+                y_lower += len(cluster_silhouette_vals)
+
+            # Get the average silhouette score and plot it
+            avg_score = np.mean(silhouette_vals)
+            ax1.axvline(avg_score, linestyle='--', linewidth=2, color='green')
+            ax1.set_yticks([])
+            ax1.set_xlim([-0.1, 1])
+            ax1.set_xlabel('Silhouette coefficient values')
+            ax1.set_ylabel('Cluster labels')
+            ax1.set_title('Silhouette plot for the various clusters', y=1.02)
+            st.write(fig)
             # Checkbox to view centroid and labels developed from clusters...
-            view_kmdet = st.checkbox("To view the centroid and the labels", value=False, key=10)
+            view_kmdet = st.checkbox("To view the centroid and the labels", value=False, key=23)
             if view_kmdet:
                 st.write(centroids_pca)
                 st.write(np.unique(labels_pca))
