@@ -195,23 +195,48 @@ def main():
     #-------------------------------------------------------------------------------
     # K-Means Clustering Begins...
     st.markdown("## **K-Means Clustering**")
+    #---------------------------------------------------------------------------------
+    # Controller for K-Means functionality...
+    st.sidebar.title("K-Means Controller")
     #-------------------------------------------------------------------------------
     # Checkbox to allow Normalisation...
-    scale = st.checkbox('Normalise dataset(it is advisable to do so)', value=False)
+    scale = st.sidebar.checkbox('Normalise dataset(It is advisable to do so)', value=False)
     if scale:
         Grouped_dataC = dataset_updated.copy()
         scaler = MinMaxScaler()
         data_columns = Grouped_dataC.drop(['team_id'], axis=1).columns
         data_scaled = pd.DataFrame(scaler.fit_transform(Grouped_dataC.drop(['team_id'], axis=1)), columns=data_columns)
         # Checkbox to view scaled dataset on the webpage...
-        view_data = st.checkbox('To view scaled dataset', value=False)
+        view_data = st.sidebar.checkbox('To view scaled dataset', value=False)
         if view_data:
             st.write(data_scaled)
     else:
         data_scaled = dataset_updated
     #---------------------------------------------------------------------------------
-    # Controller for K-Means functionality...
-    st.sidebar.title("K-Means Controller")
+    # Checkbox to allow Weight Defining...
+    weight = st.sidebar.checkbox('Feature Weights', value=False, key=10)
+    if weight:
+        st.write("### **• Setting up feature weights**")
+        with st.form("Weight_form"):
+            collist_w = data_scaled.columns.to_list()
+            wcolptions = st.multiselect('Select the columns for defining weights', collist_w)
+            min_val = float(st.number_input("Set up min value", value=0,key=21))
+            max_val = float(st.number_input("Set up max value", value=0,key=22))
+            w_allcols = st.checkbox('For selecting all columns', value=False, key=30) 
+            submit = st.form_submit_button("Submit")
+        if w_allcols:
+            col_for_form = collist_w
+        else:
+            col_for_form = wcolptions
+            labels = copy.deepcopy(col_for_form)
+            with st.form(key='weight_input'):
+                for i,col in enumerate(col_for_form):
+                    col_for_form[i] = st.slider(labels[i], min_value=min_val, max_value=max_val, value=10.0, step=0.01)
+                submit2 = st.form_submit_button(label='Submit')
+            if submit2:
+                st.write(col_for_form)
+        
+            
     #---------------------------------------------------------------------------------
     # K-Means with Principal Component Analysis
     if st.sidebar.checkbox("K-Means with PCA",False,key=3):
