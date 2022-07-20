@@ -268,7 +268,7 @@ def main():
         with column_left:
             # Form creation for users to specify pca parameters and maximum clusters...
             with st.form("PCA_form"):
-                components1 = st.number_input("Number of components", value=0,key=15)
+                components1 = int(st.number_input("Number of components", value=0,key=15))
                 components2 = st.number_input("Variance value", value=0.0,key=16)
                 Svd_Solver = st.selectbox('Svd_Solver', ('auto', 'full', 'arpack', 'randomized'))
                 max_clusters = int(st.number_input("Maximum number of Clusters", value=0,key=17))
@@ -431,7 +431,7 @@ def main():
                     ax1.text(-0.03, (y_lower + y_upper) / 2, str(i + 1))
                     y_lower += len(cluster_silhouette_vals)
 
-                # Get the average silhouette score and plot it
+                # Get the average silhouette score and plot it...
                 avg_score = np.mean(silhouette_vals)
                 ax1.axvline(avg_score, linestyle='--', linewidth=2, color='green')
                 ax1.set_yticks([])
@@ -440,8 +440,15 @@ def main():
                 ax1.set_ylabel('Cluster labels')
                 ax1.set_title('Silhouette plot for the various clusters', y=1.02)
                 st.write(fig)
-                
-                
+                # Get the team data for a particular cluster value...
+                new_frame = pd.DataFrame(dataset_updated)
+                new_frame['clusters'] = algorithm_pca.predict(principalDf)
+                columns_frame = new_frame.columns.to_list()
+                cluster_option = st.selectbox('Select the cluster',list(np.unique(labels_pca)))
+                col_select = st.multiselect('Select the columns for preview',columns_frame)
+                prev_data = new_frame.loc[(new_frame['clusters'] == cluster_option),col_select]
+                st.write(prev_data)
+                # st.write(prev_data.describe())
 
     #---------------------------------------------------------------------------------
     # K-Means without Principal Component Analysis...
