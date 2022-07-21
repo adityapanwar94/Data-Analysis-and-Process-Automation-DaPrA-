@@ -38,7 +38,7 @@ def main():
     #-------------------------------------------------------------------------------
     # Title and About Section
     st.title("Data-Analysis-and-Process-Automation Dashboard")
-    image = Image.open('Data_Analysis_Dashboard\img1.jpg')
+    image = Image.open('..img1.jpg')
     st.image(image, caption='Check About', use_column_width='always')
     with st.expander("About the webpage"):
         st.write("""
