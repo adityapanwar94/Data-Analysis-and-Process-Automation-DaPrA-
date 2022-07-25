@@ -38,7 +38,7 @@ def main():
     #-------------------------------------------------------------------------------
     # Title and About Section
     st.title("Data-Analysis-and-Process-Automation Dashboard")
-    image = Image.open('..img1.jpg')
+    image = Image.open(r'Data_Analysis_Dashboard\img1.jpg')
     st.image(image, caption='Check About', use_column_width='always')
     with st.expander("About the webpage"):
         st.write("""
@@ -74,6 +74,14 @@ def main():
     # Dropping columns from the dataset on the webpage...
     if st.sidebar.checkbox("Drop Columns",False,key=1):
         st.markdown("### Drop Irrelevant Columns")
+        with st.expander("Guide to this feature"):
+            st.write("""
+                This feature allows us to control the dimensions of the dataset by dropping user-selected columns. 
+                -   How to use:
+                    -   Select the column names from the dropdown.
+                    -   As you perform the selection you will see the change in the dimensions of the dataset immediately, after each selection.
+                    -   To revert back to original dataset select the checkbox given below
+            """)
         options = st.multiselect('Select the Columns to be dropped', collist)
         dataset_updated = dataset.drop(options,axis=1)
         collist = dataset_updated.columns.to_list()
@@ -91,6 +99,14 @@ def main():
     # Add Column Information on the webpage...
     if st.sidebar.checkbox("Add Feature Info",False,key=2):
         st.markdown("### • Generate Column Description Table")
+        with st.expander("Guide to this feature"):
+            st.write("""
+                To add description for each column follow the steps:
+                -   Select the column names from the dropdown.
+                -   As you select, a form field for each column will be generated below.
+                -   Fill the form with all the details and submit.
+                -   A list will be generated below for future reference too.
+            """)
         # Multiselect option for column selection...
         options = st.multiselect('Select the columns for which information has to be provided', collist)
         labels = copy.deepcopy(options)
@@ -101,17 +117,24 @@ def main():
                 names[i] = st.text_input(names[i], key=i)
             submit_button = st.form_submit_button(label='submit')
         # User entered data represented after submission...    
-        if submit_button:
-            for i, name in enumerate(names):
-                cols = st.columns(2)
-                cols[0].write(labels[i])
-                cols[1].write("{}".format(name))
+        # if submit_button:
+        for i, name in enumerate(names):
+            cols = st.columns(2)
+            cols[0].write(labels[i])
+            cols[1].write("{}".format(name))
     #-------------------------------------------------------------------------------
     # Visual data analysis begins...            
     st.markdown("## The Visual Data Analysis 📈")
     #*************************************************************
     # Automated Bar plots for webpage...
     st.markdown("### • Bar Plots Diagram")
+    with st.expander("Guide to this feature"):
+        st.write("""
+            This feature generates interactive and flexible bar plots. 
+            -   How to use:
+                -   Select column name/s from the dropdown.
+                -   As you perform the selection you will see appearance of bar plots with legends.
+        """)
     optionsb = st.multiselect('Select columns for analysis', collist, key=5)
     labelsb = copy.deepcopy(optionsb)
     if len(optionsb) > 0:
