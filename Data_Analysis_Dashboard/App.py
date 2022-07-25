@@ -152,6 +152,13 @@ def main():
     #****************************************************************
     # Automated Correlation Plots between two columns for the webpage...
     st.markdown("### • Correlation Plots Diagram")
+    # with st.expander("Guide to this feature"):
+    #     st.write("""
+    #         This feature generates interactive and flexible bar plots. 
+    #         -   How to use:
+    #             -   Select column name/s from the dropdown.
+    #             -   As you perform the selection you will see appearance of bar plots with legends.
+    #     """)
     optionss = st.multiselect('Select two columns for analysis', collist, key=6)
     labelss = copy.deepcopy(optionss)
     if len(optionss) == 2:
