@@ -77,7 +77,7 @@ def main():
         with st.expander("Guide to this feature"):
             st.write("""
                 This feature allows us to control the dimensions of the dataset by dropping user-selected columns. 
-                -   How to use:
+                -   **How to use:**
                     -   Select the column names from the dropdown.
                     -   As you perform the selection you will see the change in the dimensions of the dataset immediately, after each selection.
                     -   To revert back to original dataset select the checkbox given below
@@ -101,7 +101,7 @@ def main():
         st.markdown("### • Generate Column Description Table")
         with st.expander("Guide to this feature"):
             st.write("""
-                To add description for each column follow the steps:
+                **To add description for each column follow the steps:**
                 -   Select the column names from the dropdown.
                 -   As you select, a form field for each column will be generated below.
                 -   Fill the form with all the details and submit.
@@ -131,7 +131,7 @@ def main():
     with st.expander("Guide to this feature"):
         st.write("""
             This feature generates interactive and flexible bar plots. 
-            -   How to use:
+            -   **How to use:**
                 -   Select column name/s from the dropdown.
                 -   As you perform the selection you will see appearance of bar plots with legends.
         """)
@@ -152,13 +152,13 @@ def main():
     #****************************************************************
     # Automated Correlation Plots between two columns for the webpage...
     st.markdown("### • Correlation Plots Diagram")
-    # with st.expander("Guide to this feature"):
-    #     st.write("""
-    #         This feature generates interactive and flexible bar plots. 
-    #         -   How to use:
-    #             -   Select column name/s from the dropdown.
-    #             -   As you perform the selection you will see appearance of bar plots with legends.
-    #     """)
+    with st.expander("Guide to this feature"):
+        st.write("""
+            This feature generates interactive and flexible correlation plots. 
+            -   **How to use:**
+                -   Select only 2 column from the dropdown.
+                -   As you perform the selection you will see appearance of correlation plot with legends.
+        """)
     optionss = st.multiselect('Select two columns for analysis', collist, key=6)
     labelss = copy.deepcopy(optionss)
     if len(optionss) == 2:
@@ -176,6 +176,18 @@ def main():
     # Automated Parallel Category Diagrams for the webpage...
     if st.sidebar.checkbox("Parallel Diagram",False,key=7):
         st.markdown("### • Parallel Category Diagram")
+        with st.expander("Guide to this feature"):
+            st.write("""
+                **About Parallel Category Diagram:**
+                -   The parallel categories diagram is a visualization of multi-dimensional categorical data sets.
+                -   Each variable in the data set is represented by a column of rectangles, where each rectangle corresponds to a discrete value taken on by that variable. 
+                -   The relative heights of the rectangles reflect the relative frequency of occurrence of the corresponding value.
+                -   Combinations of category rectangles across dimensions are connected by ribbons, where the height of the ribbon corresponds to the relative frequency of occurrence of the combination of categories in the data set.
+                **How to use:**
+                -   Select 4 column from the dropdown.
+                -   After the selection you will see appearance of parallel plots with legends.
+                -   Use the "Select colour option" dropdown to define the colour scheme.
+            """)
         colorlist = ['Plotly3', 'dense', 'Turbo', 'Rainbow', 'Burg', 'Sunsetdark', 'Agsunset']
         options = st.multiselect('Select 4 columns for analysis', collist, key=8)
         coloroptions = st.selectbox('Select a colour option', colorlist )
@@ -227,6 +239,17 @@ def main():
     #-------------------------------------------------------------------------------
     # K-Means Clustering Begins...
     st.markdown("## **K-Means Clustering**")
+    with st.expander("This section contains..."):
+            st.write("""
+                -   **K-Means Controller on the sidebar.**
+                    -   The controller provides all the options and functionalities to implement K-means clustering such as:
+                        -   **Normalise Dataset**
+                            -   Select the checkbox on sidebar to scale the datapoints within the range of 0 to 1 (This is highly advisable for PCA implementation).
+                            -   You can also view the scaled dataset through the sidebar option.
+                        -   **Feature Weights**
+                        -   **K-Means with PCA**
+                        -   **K-Means without PCA**
+            """)
     #---------------------------------------------------------------------------------
     # Controller for K-Means functionality...
     st.sidebar.title("K-Means Controller")
@@ -250,6 +273,16 @@ def main():
     w_flag = 0
     if weight:
         st.write("### **• Setting up feature weights**")
+        with st.expander("About this feature..."):
+            st.write("""
+                **How to use:**
+                -   Select the columns for which you want to define weights from the form's dropdown or select to checkbox to choose all columns at once.
+                -   Set up the max limit of the weights to be assigned.
+                -   Set up the min limit of the weights to be assigned. (This is done to set max and min range of sliders)
+                -   Submit the form to create weight slider for each feature.
+                -   Set up slider value for each feature column and hit submit.
+                -   To view the weighted dataset, select the checkbox. 
+            """)
         # Forms to select columns, max values, min values...
         with st.form("Weight_form"):
             collist_w = data_scaled.columns.to_list()
@@ -293,9 +326,40 @@ def main():
     if st.sidebar.checkbox("K-Means with PCA",False,key=14):
         flag = 0
         st.write("### **• K-Means with Principal Component Analysis**")
+        with st.expander("About this section..."):
+            st.write("""
+                **About PCA and its features:**
+                -   In short, PCA is a dimensionality reduction technique that transforms a set of features in a dataset into a smaller number of features called principal components while at the same time trying to retain as much information in the original dataset as possible:
+            """)
+            col1, col2, col3 = st.columns([1,6,1])
+            with col1:
+                st.write("")
+            with col2:
+                image1 = Image.open(r'Data_Analysis_Dashboard\pca.png')
+                st.image(image1, caption='Check About', width=500)
+            with col3:
+                st.write("")
+            st.write("""
+                **Parameters used:**
+                -   n_components- int, float, default=None
+                    -   Number of components to keep. if n_components is not set all components are kept
+                -   svd_solver- {'auto', 'full', 'arpack', 'randomized'}, default='auto'
+            """)
+            url = "https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html"
+            st.markdown("check out this [link](%s) to know more about the features of PCA" % url)
+
+            url1 = "https://towardsdatascience.com/using-principal-component-analysis-pca-for-machine-learning-b6e803f5bf1e"
+            st.markdown("To know more about PCA implemententation, check this [link](%s)" % url1)      
         column_left, column_right = st.columns(2)
         #_________________________________________________________________________
         with column_left:
+            with st.expander("Guide to PCA Forms"):
+                st.write("""
+                    **Follow the steps:**
+                    -   Either set the number of components or variance value for the PCA implementation. (make sure the other one is zero)
+                    -   Define the type of svd_solver.(Auto is recommended)
+                    -   Set the maximum number of clusters to be analysed under elbow graph.
+                """)  
             # Form creation for users to specify pca parameters and maximum clusters...
             with st.form("PCA_form"):
                 components1 = int(st.number_input("Number of components", value=0,key=15))
@@ -352,10 +416,16 @@ def main():
                 pcacolname.append(az_Upper[i])
             #_________________________________________________________________________
             with column_right:
+                with st.expander("Guide to column form"):
+                    st.write("""
+                        **Follow the steps:**
+                        -   If you have defined the number of components, then you have to label each component column through the form.
+                        -   Fill up the column names in the form given below and hit submit.
+                    """)  
                 # Form creation for users to define column names for PCA generated dataset...
                 with st.form(key='columnname'):
                     for i,pcacol in enumerate(pcacolname):
-                        pcacolname[i] = st.text_input("column-"+pcacolname[i], key = i)
+                        pcacolname[i] = st.text_input("component-"+pcacolname[i], key = i)
                     submitcol = st.form_submit_button(label='Submit Names')
             #__________________________________________________________________________
             # PCA Implementation with user-defined parameters...
@@ -554,6 +624,15 @@ def main():
                 fig = px.scatter_3d(new_dataset, x = kmcolptions[0], y=kmcolptions[1], z=kmcolptions[2],
                 color=labels_pca, opacity = 0.8, size_max=30)
                 st.write(fig)
+            # Get the team data for a particular cluster value...
+            new_frame = pd.DataFrame(dataset_updated)
+            new_frame['clusters'] = algorithm_pca.predict(new_dataset)
+            columns_frame = new_frame.columns.to_list()
+            cluster_option = st.selectbox('Select the cluster',list(np.unique(labels_pca)))
+            col_select = st.multiselect('Select the columns for preview',columns_frame)
+            prev_data = new_frame.loc[(new_frame['clusters'] == cluster_option),col_select]
+            st.write(prev_data)
+            # st.write(prev_data.describe())
     
 
 
