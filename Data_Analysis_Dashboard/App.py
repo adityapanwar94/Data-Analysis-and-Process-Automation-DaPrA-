@@ -590,7 +590,7 @@ def main():
             url2 = r"https://towardsdatascience.com/k-means-clustering-algorithm-applications-evaluation-methods-and-drawbacks-aa03e644b48a#:~:text=Kmeans%20clustering%20is%20one%20of,into%20distinct%20non%2Doverlapping%20subgroups."
             st.markdown("To know more about K-Means, check this [link](%s)" % url2)
         #_______________________________________________________________________________
-        # Form creation for users to specify maximum clusters and columns to include...
+        # Form creation for users to specify maximum clusters and columns to include... 
         with st.expander("How to use"):
                 st.write("""
                     -   Select the columns to be included in the K-Means clustering or select all the columns at once.
