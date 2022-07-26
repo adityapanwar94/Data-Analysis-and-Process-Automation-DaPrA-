@@ -670,10 +670,6 @@ def main():
                     st.write("### **• The Cluster Data Analysis**")
                     st.write(prev_data.describe())
 
-    
-
-
-
 if __name__ == "__main__":
     main()   
 
