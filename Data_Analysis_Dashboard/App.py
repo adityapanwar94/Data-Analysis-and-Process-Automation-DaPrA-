@@ -345,10 +345,10 @@ def main():
                     -   Number of components to keep. if n_components is not set all components are kept
                 -   svd_solver- {'auto', 'full', 'arpack', 'randomized'}, default='auto'
             """)
-            url = "https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html"
+            url = r"https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html"
             st.markdown("check out this [link](%s) to know more about the features of PCA" % url)
 
-            url1 = "https://towardsdatascience.com/using-principal-component-analysis-pca-for-machine-learning-b6e803f5bf1e"
+            url1 = r"https://towardsdatascience.com/using-principal-component-analysis-pca-for-machine-learning-b6e803f5bf1e"
             st.markdown("To know more about PCA implemententation, check this [link](%s)" % url1)      
         column_left, column_right = st.columns(2)
         #_________________________________________________________________________
@@ -476,11 +476,23 @@ def main():
                 km = km.fit(principalDf)
                 wcss.append(km.inertia_)
             st.write("### **• The Elbow Graph**")
+            with st.expander("About K-Means Clustering"):
+                st.write("""
+                    -   **Introduction**
+                        -   Kmeans algorithm is an iterative algorithm that tries to partition the dataset into Kpre-defined distinct non-overlapping subgroups (clusters) where each data point belongs to only one group.
+                    -   **Elbow Method**
+                        -   Elbow method gives us an idea on what a good k number of clusters would be based on the sum of squared distance (SSE) between data points and their assigned clusters’ centroids. We pick k at the spot where SSE starts to flatten out and forming an elbow.
+                    -   **Silhouette Analysis**
+                        -   Silhouette analysis can be used to determine the degree of separation between clusters. 
+                """)
+                url2 = r"https://towardsdatascience.com/k-means-clustering-algorithm-applications-evaluation-methods-and-drawbacks-aa03e644b48a#:~:text=Kmeans%20clustering%20is%20one%20of,into%20distinct%20non%2Doverlapping%20subgroups."
+                st.markdown("To know more about K-Means, check this [link](%s)" % url2) 
+
             fig = go.Figure(data = go.Scatter(x = np.array(K), y = wcss))
             fig.update_layout(title='WCSS vs. Cluster number', xaxis_title='Clusters', yaxis_title='WCSS')
             st.write(fig)
             # Input box to select the optimal number of clusters from elbow graph...
-            opt_cluster = int(st.number_input("Select the optimal cluster value",value=0,key=18))
+            opt_cluster = int(st.number_input("Select the optimal cluster value from elbow graph",value=0,key=18))
             
             if opt_cluster:
                 algorithm_pca = (KMeans(n_clusters = opt_cluster ,init='k-means++', n_init = 10 ,max_iter=300, 
@@ -490,9 +502,15 @@ def main():
                 centroids_pca = algorithm_pca.cluster_centers_
                 # Checkbox to view centroid and labels developed from clusters...
                 view_kmdet = st.checkbox("To view the centroid and the labels", value=False)
+                col_lab, col_center = st.columns(2)
                 if view_kmdet:
-                    st.write(centroids_pca)
-                    st.write(np.unique(labels_pca))
+                    with col_lab:
+                        st.write("### **• Cluster Labels**")
+                        st.write(np.unique(labels_pca))
+                    with col_center:
+                        st.write("### **• Cluster Centroid**")
+                        st.write(centroids_pca)
+                    
                 # Visualise 2-Dimensional and 3-Dimensional clustering...
                 if len(pcacolname) == 0:
                     # Scatter plot for two-dimensional PCA datset... 
@@ -546,9 +564,15 @@ def main():
                 columns_frame = new_frame.columns.to_list()
                 cluster_option = st.selectbox('Select the cluster',list(np.unique(labels_pca)))
                 col_select = st.multiselect('Select the columns for preview',columns_frame)
-                prev_data = new_frame.loc[(new_frame['clusters'] == cluster_option),col_select]
-                st.write(prev_data)
-                # st.write(prev_data.describe())
+                prev_data = pd.DataFrame(new_frame.loc[(new_frame['clusters'] == cluster_option),col_select])
+                col_data, col_analysis = st.columns(2)
+                with col_data:
+                    st.write("### **• The Cluster Data**")
+                    st.write(prev_data)
+                with col_analysis:
+                    if not prev_data.empty:
+                        st.write("### **• The Cluster Data Analysis**")
+                        st.write(prev_data.describe())
 
     #---------------------------------------------------------------------------------
     # K-Means without Principal Component Analysis...
@@ -579,7 +603,7 @@ def main():
         fig.update_layout(title='WCSS vs. Cluster number', xaxis_title='Clusters', yaxis_title='WCSS')
         st.write(fig)
         # Input box to select the optimal number of clusters from elbow graph...
-        opt_cluster = int(st.number_input("Select the optimal cluster value",value=0,key=22))
+        opt_cluster = int(st.number_input("Select the optimal cluster value from elbow graph",value=0,key=22))
         if opt_cluster:
             algorithm_pca = (KMeans(n_clusters = opt_cluster ,init='k-means++', n_init = 10 ,max_iter=300, 
                     tol=0.0001,  random_state= 100  , algorithm='elkan') )
@@ -612,9 +636,15 @@ def main():
             st.write(fig)
             # Checkbox to view centroid and labels developed from clusters...
             view_kmdet = st.checkbox("To view the centroid and the labels", value=False, key=23)
+            col1_lab, col1_center = st.columns(2)
             if view_kmdet:
-                st.write(centroids_pca)
-                st.write(np.unique(labels_pca))
+                with col1_lab:
+                    st.write("### **• Cluster Labels**")
+                    st.write(np.unique(labels_pca))
+                with col1_center:
+                    st.write("### **• Cluster Centroid**")
+                    st.write(centroids_pca)
+                
             # Scatter plot for two-dimensional PCA datset... 
             if len(kmcolptions) == 2:
                 fig = px.scatter(new_dataset, x=kmcolptions[0], y = kmcolptions[1], color=labels_pca)
@@ -630,9 +660,16 @@ def main():
             columns_frame = new_frame.columns.to_list()
             cluster_option = st.selectbox('Select the cluster',list(np.unique(labels_pca)))
             col_select = st.multiselect('Select the columns for preview',columns_frame)
-            prev_data = new_frame.loc[(new_frame['clusters'] == cluster_option),col_select]
-            st.write(prev_data)
-            # st.write(prev_data.describe())
+            prev_data = pd.DataFrame(new_frame.loc[(new_frame['clusters'] == cluster_option),col_select])
+            col_data, col_analysis = st.columns(2)
+            with col_data:
+                st.write("### **• The Cluster Data**")
+                st.write(prev_data)
+            with col_analysis:
+                if not prev_data.empty:
+                    st.write("### **• The Cluster Data Analysis**")
+                    st.write(prev_data.describe())
+
     
 
 
