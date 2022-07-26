@@ -578,15 +578,33 @@ def main():
     # K-Means without Principal Component Analysis...
     if st.sidebar.checkbox("K-Means without PCA",False,key=19):
         st.write("### **• K-Means without Principal Component Analysis**")
+        with st.expander("About K-Means Clustering"):
+            st.write("""
+                -   **Introduction**
+                    -   K-means algorithm is an iterative algorithm that tries to partition the dataset into Kpre-defined distinct non-overlapping subgroups (clusters) where each data point belongs to only one group.
+                -   **Elbow Method**
+                    -   Elbow method gives us an idea on what a good k number of clusters would be based on the sum of squared distance (SSE) between data points and their assigned clusters’ centroids. We pick k at the spot where SSE starts to flatten out and forming an elbow.
+                -   **Silhouette Analysis**
+                    -   Silhouette analysis can be used to determine the degree of separation between clusters. 
+            """)
+            url2 = r"https://towardsdatascience.com/k-means-clustering-algorithm-applications-evaluation-methods-and-drawbacks-aa03e644b48a#:~:text=Kmeans%20clustering%20is%20one%20of,into%20distinct%20non%2Doverlapping%20subgroups."
+            st.markdown("To know more about K-Means, check this [link](%s)" % url2)
         #_______________________________________________________________________________
         # Form creation for users to specify maximum clusters and columns to include...
+        with st.expander("How to use"):
+                st.write("""
+                    -   Select the columns to be included in the K-Means clustering or select all the columns at once.
+                    -   Enter the maximum number of clusters to be analysed under elbow method.
+                    -   Submit the form  
+                """)
         with st.form("PCA2_form"):
             collistn = data_scaled.columns.to_list()
             kmcolptions = st.multiselect('Select the columns for K-means', collistn)
-            allcols = int(st.number_input("To select all cols type 1 else 0", value=0,key=20))
+            # allcols = int(st.number_input("To select all cols type 1 else 0", value=0,key=20))
+            allcols = st.checkbox('For selecting all columns', value=False, key=30) 
             max_clusters = int(st.number_input("Maximum number of Clusters", value=0,key=21))
             submit = st.form_submit_button("Submit")
-        if allcols == 1:
+        if allcols:
             new_dataset = data_scaled
         else:
             new_dataset = data_scaled[kmcolptions]
