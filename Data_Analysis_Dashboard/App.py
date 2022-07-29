@@ -573,6 +573,16 @@ def main():
                     if not prev_data.empty:
                         st.write("### **• The Cluster Data Analysis**")
                         st.write(prev_data.describe())
+                # To download the dataset as csv file...
+                def convert_df(df):
+                    return df.to_csv(index=True)
+                
+                csv = convert_df(new_frame)
+                st.download_button(label="Download data as CSV", data=csv, file_name='FInal_df.csv',mime='text/csv')
+
+                # download_data = st.checkbox("To download the csv file with cluster data", value=False, key=26)
+                # if download_data:
+                #     new_frame.to_csv(index=True)
 
     #---------------------------------------------------------------------------------
     # K-Means without Principal Component Analysis...
@@ -687,6 +697,12 @@ def main():
                 if not prev_data.empty:
                     st.write("### **• The Cluster Data Analysis**")
                     st.write(prev_data.describe())
+            # To download the dataset as csv file...
+            def convert_df(df):
+                return df.to_csv(index=True)
+            
+            csv = convert_df(new_frame)
+            st.download_button(label="Download data as CSV", data=csv, file_name='FInal_df.csv',mime='text/csv')
 
 if __name__ == "__main__":
     main()   
