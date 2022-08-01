@@ -90,11 +90,11 @@ e-Yantra Robotics Challenge has massive participation every year, with students 
 2. Technical Tools 
   * [![Streamlit][streamlit.js]][streamlit-url]
   * [![Google Colab][colab.js]][colab-url]
-  * [![Angular][Angular.io]][Angular-url]
-  * [![Svelte][Svelte.dev]][Svelte-url]
-  * [![Laravel][Laravel.com]][Laravel-url]
-  * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-  * [![JQuery][JQuery.com]][JQuery-url]
+3. Libraries
+  * [![Pandas][pandas.js]][pandas-url]
+  * [![Numpy][numpy.js]][numpy-url]
+  * [![Plotly][plotly.js]][plotly-url]
+  * [![Scikit Learn][sklearn.js]][sklearn-url]
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -229,13 +229,13 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 [python-url]: https://www.python.org/
 [colab.js]: https://img.shields.io/badge/Colab-F9AB00?style=for-the-badge&logo=googlecolab&color=525252
 [colab-url]: https://research.google.com/colaboratory/
-[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-[Angular-url]: https://angular.io/
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[Laravel-url]: https://laravel.com
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
+[pandas.js]: https://img.shields.io/badge/Pandas-2C2D72?style=for-the-badge&logo=pandas&logoColor=white
+[pandas-url]: https://pandas.pydata.org/
+[numpy.js]: https://img.shields.io/badge/Numpy-777BB4?style=for-the-badge&logo=numpy&logoColor=white
+[numpy-url]: https://numpy.org/
+[plotly.js]: https://img.shields.io/badge/Plotly-239120?style=for-the-badge&logo=plotly&logoColor=white
+[plotly-url]: https://plotly.com/
+[sklearn.js]: https://img.shields.io/badge/scikit_learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white
+[sklearn-url]: https://scikit-learn.org/stable/
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com 
