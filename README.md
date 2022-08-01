@@ -27,8 +27,6 @@
 <h3 align="center">Data-Analysis-and-Process-Automation</h3>
 
   <p align="center">
-    project_description
-    <br />
     <a href="https://github.com/adityapanwar94/Data-Analysis-and-Process-Automation-DaPrA-"><strong>Explore the docs »</strong></a>
     <br />
     <br />
@@ -75,7 +73,7 @@
 
 
 
-[![Watch the video](https://img.youtube.com/vi/iTu8IUulXRU/hqdefault.jpg)](https://youtu.be/iTu8IUulXRU)
+[![Watch the video](https://img.youtube.com/vi/iTu8IUulXRU/hqdefault.jpg)](https://www.youtube.com/watch?v=iTu8IUulXRU)
 
 e-Yantra Robotics Challenge has massive participation every year, with students registering by filling up their user profiles. These profiles gathered information about the users, ranging from their year and branch of engineering to the online courses and the skills they have acquired. This dataset is a source of assigning competition themes to the group of individuals participating as a team. Thus, the project aims at devising automation tools in three stages:
 1. Data cleaning and preprocessing pipeline for the user-profile dataset.
@@ -87,15 +85,16 @@ e-Yantra Robotics Challenge has massive participation every year, with students 
 
 
 ### Built With
-
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+1. Programming Language:
+  * [![Python][python.js]][python-url]
+2. Technical Tools 
+  * [![Streamlit][streamlit.js]][streamlit-url]
+  * [![Google Colab][colab.js]][colab-url]
+  * [![Angular][Angular.io]][Angular-url]
+  * [![Svelte][Svelte.dev]][Svelte-url]
+  * [![Laravel][Laravel.com]][Laravel-url]
+  * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
+  * [![JQuery][JQuery.com]][JQuery-url]
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -224,12 +223,12 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: images/screenshot.png
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
+[streamlit.js]: https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white
+[streamlit-url]: https://streamlit.io/
+[python.js]: https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue
+[python-url]: https://www.python.org/
+[colab.js]: https://img.shields.io/badge/Colab-F9AB00?style=for-the-badge&logo=googlecolab&color=525252
+[colab-url]: https://research.google.com/colaboratory/
 [Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
 [Angular-url]: https://angular.io/
 [Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
