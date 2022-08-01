@@ -73,8 +73,14 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+
+
+[![Watch the video](https://img.youtube.com/vi/iTu8IUulXRU/hqdefault.jpg)](https://youtu.be/iTu8IUulXRU)
+
+e-Yantra Robotics Challenge has massive participation every year, with students registering by filling up their user profiles. These profiles gathered information about the users, ranging from their year and branch of engineering to the online courses and the skills they have acquired. This dataset is a source of assigning competition themes to the group of individuals participating as a team. Thus, the project aims at devising automation tools in three stages:
+1. Data cleaning and preprocessing pipeline for the user-profile dataset.
+2. Data Analysis and clustering dashboard web application for the preprocessed and unlabelled dataset.
+3. Machine Learning based model to predict the suitable themes based on the user data.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
