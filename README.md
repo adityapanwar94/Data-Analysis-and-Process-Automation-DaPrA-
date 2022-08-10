@@ -142,9 +142,23 @@ Note: The Data_Analysis_Dashboard folder contains the code for the web applicati
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+1. For dashboard usage and implementation:
+_please refer to the [Video](https://www.youtube.com/watch?v=iTu8IUulXRU)_
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+2. For working around with the model follow the steps given below:
+  - Run the SSL_ModelDevelopment.ipynb notebook
+  
+  - Select the system mode, here a recommendation system generates theme recommendations for preference filling whereas the allotment system specifies the final theme for a team based on their personal data and theme preferences.
+  
+  ![image](https://user-images.githubusercontent.com/48209998/183883779-c83c80a1-3043-4192-9d96-a57c37628cc3.png)
+  - View the results under Meta Estimator Model (Most efficient Model)
+  
+  ![image](https://user-images.githubusercontent.com/48209998/183884742-bf63a8a0-4c13-438f-a746-593582148ea2.png)
+  
+  - Final Prediction dataset will be generated below with the predicted theme allotment
+  
+  - You can go back, change the system type and run the following lines of code again to view the results.
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -153,12 +167,33 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
+- [ ] Section 1- Data Preprocessing pipelines
+  - [ ] Dataset_filtering(User_data_only)
+     - [ ] Removing teams less than 4 members
+     - [ ] Dropping columns with almost all null values
+     - [ ] Dropping irrelevant columns
+     - [ ] Converting categorical values to numerical values
+     - [ ] Function to generate participation frequency
+     - [ ] Conversion of 30 different department categories into three 4 categories (Mechanical, Electrical, Computers, Others) 
+     - [ ] Correcting CGPA values greater than 10
+  - [ ] Dataset_filtering_and_managing_null_values(User_data_only)
+      - [ ] Replacing null values 
+      - [ ] One hot encoding of categorical columns
+      - [ ] Grouping dataset based on team_id 
+      - [ ] Final Grouped dataset
+  - [ ] Corrected_Computer_Specification(data preprocessing for computer specification same steps followed)
+  - [ ] Merging the grouped team data with the team-wise grouped computer specification data  
+- [ ] Section 2- Data Analysis Dashboard
+  - [ ] Automation of column dropping mechanism 
+  - [ ] Interactive bar graph, correlation graph and parallel category plot features
+  - [ ] Normalisation of dataset feature
+  - [ ] Parameter Weight Defining Mecahnism
+  - [ ] K-Means with Principal Component Analysis feature
+  - [ ] Simple K-Means
+- [ ] Model Development
+  - [ ] Model as recommender system (without preferences)
+  - [ ] Model as allotment system (with preferences)
+  - [ ] 3 different algorithms under SSL implemented
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
