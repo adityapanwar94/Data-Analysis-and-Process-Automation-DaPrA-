@@ -12,7 +12,7 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+[![GPL License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
@@ -190,7 +190,7 @@ _please refer to the [Video](https://www.youtube.com/watch?v=iTu8IUulXRU)_
   - [ ] Parameter Weight Defining Mecahnism
   - [ ] K-Means with Principal Component Analysis feature
   - [ ] Simple K-Means
-- [ ] Model Development
+- [ ] Section 3- Model Development
   - [ ] Model as recommender system (without preferences)
   - [ ] Model as allotment system (with preferences)
   - [ ] 3 different algorithms under SSL implemented
@@ -259,7 +259,7 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 [issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
 [issues-url]: https://github.com/github_username/repo_name/issues
 [license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
+[license-url]: https://github.com/adityapanwar94/Data-Analysis-and-Process-Automation-DaPrA-/blob/main/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: images/screenshot.png
