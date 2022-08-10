@@ -30,11 +30,11 @@
     <a href="https://github.com/adityapanwar94/Data-Analysis-and-Process-Automation-DaPrA-"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/adityapanwar94/Data-Analysis-and-Process-Automation-DaPrA-">View Demo</a>
+    <a href="https://www.youtube.com/watch?v=iTu8IUulXRU">View Demo</a>
     ·
     <a href="https://github.com/adityapanwar94/Data-Analysis-and-Process-Automation-DaPrA-/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/adityapanwar94/Data-Analysis-and-Process-Automation-DaPrA-/issues">Request Feature</a>
+<!--     · -->
+<!--     <a href="https://github.com/adityapanwar94/Data-Analysis-and-Process-Automation-DaPrA-/issues">Request Feature</a> -->
   </p>
 </div>
 
