@@ -103,32 +103,37 @@ e-Yantra Robotics Challenge has massive participation every year, with students 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+To locally run the various sections of the project follow these simple steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
+
+* Download the packages listed under .streamlit/requirements.txt 
   ```sh
-  npm install npm@latest -g
+  pip install *name of the package from the list*
   ```
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. For running the dashboard locally:
+  - Clone the repo
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/adityapanwar94/Data-Analysis-and-Process-Automation-DaPrA-
    ```
-3. Install NPM packages
+   - Navigate to the Data_Analysis_Dashboard folder through the terminal
+   - Once inside the folder run the following command in the terminal
    ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+   streamlit run App.py
+   ``` 
+2. To implement the prediction model refer the code under  SSL_ModelDevelopment.ipynb notebook
+3. Refer to the colab notebooks for data preprocessing pipelines
+
+<p> 
+Note: The Data_Analysis_Dashboard folder contains the code for the web application and the associated dataset. Implemention of a new dataset with the dashboard should be according to the following standards:
+
+1. Replacement of null values 
+2. Conversion of categorical values to numerics 
+</p>
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
